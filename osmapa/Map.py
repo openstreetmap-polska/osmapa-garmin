@@ -1,4 +1,8 @@
 import osmapa
+import osmapa.get
+import osmapa.boundaries
+import osmapa.compile
+import osmapa.split
 import time
 
 class Map:

@@ -1,9 +1,5 @@
 # coding: utf-8
 import os
-import osmapa.get
-import osmapa.boundaries
-import osmapa.compile
-import osmapa.split
 from osmapa.Map import Map
 
 pbf_filename = 'poland-latest.osm.pbf'
@@ -14,7 +10,7 @@ wersja_mapy= data_kompilacji + wersja
 
 fid_glowna="004"
 styl_mapy_glowna="rogal"
-typfile_glowna="rogal.TYP"       
+typfile_glowna="rogal.typ"       
 
 # Root directory.
 mapa_root=os.path.abspath("./")
@@ -30,7 +26,7 @@ if __name__=="__main__":
     #map.generate_boundaries()
     
     #map.split()
-    #map.prepare()
-    #map.compile()
-    #map.clean()
+    map.prepare()
+    map.compile()
+    map.clean()
 
