@@ -1,0 +1,1 @@
+SEVERE (StyledConverter): 66004001.osm.pbf: At least one 'lines' rule in the style contains the expression mkgmap:dest_hint=true, it should be changed to mkgmap:dest_hint=*
