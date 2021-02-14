@@ -1,15 +1,17 @@
 import osmapa
+import time
 
 class Map:
 
-    def __init__(self, version, date, fid, style, typfile, pbf_filename, root_dir) -> None:
+    def __init__(self, version, fid, style, typfile, pbf_filename, root_dir) -> None:
         self.version = version                                                          # wersja
-        self.date = date                                                                # data_kompilacji
         self.fid = fid                                                                  # fid_glowna
         self.style = style                                                              # styl_mapy_glowna
         self.typfile = typfile                                                          # typfile_glowna
         self.pbf_filename = pbf_filename
         self.root_dir = root_dir                                                        # mapa_root
+        self.date = time.strftime('%Y%m%d')                                             # data_kompilacji
+
         self.map_version = self.date + self.version                                     # wersja_mapy
         self.bin_dir = self.root_dir + "/bin"                                           # binarki
         self.src_dir = self.root_dir + "/OSM"                                           # tmp_dane_osm
