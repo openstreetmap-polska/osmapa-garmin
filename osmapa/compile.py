@@ -77,7 +77,7 @@ def main(bin_dir, mapa_root, tmp_mapa_glowna, typfile_glowna, styl_mapy_glowna, 
         ret = os.system("start /low /b /wait {binarki}\\zip.exe -9 {mapy_gotowe}\\OSMapaPL-{wersja_mapy}_IMG.zip gmapsupp.img".format(
             binarki=bin_dir, wersja_mapy=wersja_mapy, mapy_gotowe=mapy_gotowe))
     elif platform.system() == 'Linux':
-        ret = os.system("zip -9 {mapy_gotowe}\\OSMapaPL-{wersja_mapy}_IMG.zip gmapsupp.img".format(
+        ret = os.system("zip -9 {mapy_gotowe}/OSMapaPL-{wersja_mapy}_IMG.zip gmapsupp.img".format(
             binarki=bin_dir, wersja_mapy=wersja_mapy, mapy_gotowe=mapy_gotowe))
     else:
         raise Exception("Unsupported operating system.")
