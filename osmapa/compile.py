@@ -1,11 +1,16 @@
+    """OpenStreetMap Garmin map compiler.
+    """
 import os
 import platform
 import shutil
 
-# dest_dir - katalog tymczasowy kompilacji, split_source_dir - katalog z danymi split
-
-
 def prepare(dest_dir, split_source_dir):
+    """Prepare a working directory for map compilation.
+
+    Args:
+        dest_dir (string):  working directory for map compilation
+        split_source_dir (string): directory containing a split map
+    """
 
     try:
         print("Usuwanie zawartosci katalogu: " + dest_dir)
@@ -25,68 +30,106 @@ def prepare(dest_dir, split_source_dir):
     for plik in os.listdir(split_source_dir):
         shutil.copy(split_source_dir + "/" + plik, dest_dir)
 
-# kompiluj_mape_glowna()
-def main(bin_dir, mapa_root, tmp_mapa_glowna, typfile_glowna, styl_mapy_glowna, fid_glowna, tmp_dane_osm, wersja_mapy, mapy_gotowe):
 
-    os.chdir(tmp_mapa_glowna)
-    shutil.copy(bin_dir + "/typ/" + typfile_glowna, "style.typ")
+def produce(bin_dir, mapa_root, map_work_dir, typfile, style, configfile, fid, src_dir, map_version, publisher_id, map_name, out_dir):
+    """Compile a distrubution set for a single map.
+
+    Args:
+        bin_dir (string): path to a directory holding compilation tools
+        mapa_root (string): path to the root directory of a map production environment
+        map_work_dir (string): path to a map compilation working directory
+        typfile (string): name of a .typ file to be used
+        style (string):  name of the style to be used 
+        configfile (string): name of the mkgmap configuration file to be used
+        fid (string): map identifier
+        src_dir (string): path to a directory with source data
+        map_version (string): string with map version
+        publisher_id (string): publisher ID to be used (2-digit)
+        map_name (string): alphanumeric map name to be used
+        out_dir (string): path to a directory where the produced map distribution set will be placed
+
+    Returns:
+        None
+    """
+
+    os.chdir(map_work_dir)
+
+    if (typfile != None and len(typfile) > 0):
+        tmp_typ_filename = "style.typ"
+        shutil.copy(bin_dir + "/typ/" + typfile, tmp_typ_filename)
+    else: 
+        tmp_typ_filename = ""
+    
     ret = -1
+    command = 'java -enableassertions -Xmx6000m -jar {bin_dir}/mkgmap/mkgmap.jar --verbose --family-name={map_name} --description={map_name} --series-name={map_name}  --coastlinefile={src_dir}/coastlines_europe-latest.osm.pbf  --read-config={mapa_root}/config/{configfile} --bounds={src_dir}/bounds --family-id={fid} --product-id={fid} --mapname={publisher_id}{fid}001 --overview-mapname={publisher_id}{fid}000   --style-file={bin_dir}/resources/styles/ --style={styl}  --check-styles  -c template.args  {tmp_typ_filename}'.format(
+            mapa_root=mapa_root, bin_dir=bin_dir, styl=style, configfile=configfile, fid=fid, publisher_id=publisher_id,map_name=map_name, src_dir=src_dir, tmp_typ_filename=tmp_typ_filename)
+
     if platform.system() == 'Windows':
-        ret = os.system('start /low /b /wait java -enableassertions -Xmx6000m -jar {binarki}/mkgmap/mkgmap.jar --verbose --family-name=OSMapaPL --description=OSMapaPL --series-name=OSMapaPL  --coastlinefile={dane_osm}/coastlines_europe-latest.osm.pbf  --read-config={mapa_root}/config/osmapa.config --bounds={dane_osm}/bounds --family-id={fid_glowna} --product-id={fid_glowna} --mapname=66{fid_glowna}001 --overview-mapname=66{fid_glowna}000   --style-file={binarki}/resources/styles/ --style={styl}  --check-styles  -c template.args  style.typ'.format(
-            mapa_root=mapa_root, binarki=bin_dir, styl=styl_mapy_glowna, fid_glowna=fid_glowna, dane_osm=tmp_dane_osm))
-    elif platform.system() == 'Linux':
-        ret = os.system('java -enableassertions -Xmx6000m -jar {binarki}/mkgmap/mkgmap.jar --verbose --family-name=OSMapaPL --description=OSMapaPL --series-name=OSMapaPL  --coastlinefile={dane_osm}/coastlines_europe-latest.osm.pbf  --read-config={mapa_root}/config/osmapa.config --bounds={dane_osm}/bounds --family-id={fid_glowna} --product-id={fid_glowna} --mapname=66{fid_glowna}001 --overview-mapname=66{fid_glowna}000   --style-file={binarki}/resources/styles/ --style={styl}  --check-styles  -c template.args  style.typ'.format(
-            mapa_root=mapa_root, binarki=bin_dir, styl=styl_mapy_glowna, fid_glowna=fid_glowna, dane_osm=tmp_dane_osm))
+        command = 'start /low /b /wait ' + command
+
+    if platform.system() == 'Windows' or platform.system() == 'Linux':
+        ret = os.system(command)
     else:
         raise Exception("Unsupported operating system.")
 
     print("kompiluj_mape - mkgmap return value: " + str(ret))
 
+    # mkgmap has created an NSI file named as follows.
+    nsi_filename = "{publisher_id}{fid}000.nsi".format(publisher_id=publisher_id, fid=fid)
+
     # When compiling 66004000.nsi file on Linux, a directive "Unicode True" must be added on top of it.
-    if not os.path.isfile('66004000.nsi_ORG'):
-        os.rename('66004000.nsi', '66004000.nsi_ORG')
-    with open('66004000.nsi_ORG', 'r') as f:
-        with open('66004000.nsi', 'w') as f2: 
+    if not os.path.isfile(nsi_filename + '_ORG'):
+        os.rename(nsi_filename, nsi_filename + '_ORG')
+    with open(nsi_filename + '_ORG', 'r') as f:
+        with open(nsi_filename, 'w') as f2: 
             f2.write('Unicode True\n')
             f2.write(f.read())
 
+    # Make installer.
     if platform.system() == 'Windows':
         ret = os.system(
-            "start /low /b /wait {binarki}\\NSIS\\makensis.exe 66004000.nsi".format(binarki=bin_dir))
+            "start /low /b /wait {bin_dir}\\NSIS\\makensis.exe {nsi_filename}".format(bin_dir=bin_dir, nsi_filename=nsi_filename))
     elif platform.system() == 'Linux':
-
-        ret = os.system("makensis 66004000.nsi")
+        ret = os.system("makensis {nsi_filename}".format(nsi_filename=nsi_filename))
     else:
         raise Exception("Unsupported operating system.")
-
-    print("nsis - ret: " + str(ret))
-
-    if(ret != 0):
-        raise Exception("Blad kompilatora NSIS")
-
+    if(ret == 0):
+        print("Installer created.")
+    else:
+        raise Exception("NSIS compiler error.")
+    
+    # Move installer to the products directory.
     try:
-        os.remove("{mapy_gotowe}/OSMapaPL-{wersja_mapy}.exe".format(
-            mapy_gotowe=mapy_gotowe, wersja_mapy=wersja_mapy))
+        os.remove("{out_dir}/{map_name}-{wersja_mapy}.exe".format(
+            out_dir=out_dir, map_version=map_version, map_name=map_name))
     except:
         pass
+    os.rename("{map_name}.exe".format(map_name=map_name), "{out_dir}/{map_name}-{map_version}.exe".format(
+        out_dir=out_dir, map_version=map_version, map_name=map_name))
 
-    os.rename("OSMapaPL.exe", "{mapy_gotowe}/OSMapaPL-{wersja_mapy}.exe".format(
-        mapy_gotowe=mapy_gotowe, wersja_mapy=wersja_mapy))
-
+    # Compress single Garmin IMG file.  
     if platform.system() == 'Windows':
-        ret = os.system("start /low /b /wait {binarki}\\zip.exe -9 {mapy_gotowe}\\OSMapaPL-{wersja_mapy}_IMG.zip gmapsupp.img".format(
-            binarki=bin_dir, wersja_mapy=wersja_mapy, mapy_gotowe=mapy_gotowe))
+        ret = os.system("start /low /b /wait {bin_dir}\\zip.exe -9 {out_dir}\\{map_name}-{map_version}_IMG.zip gmapsupp.img".format(
+            bin_dir=bin_dir, map_version=map_version, out_dir=out_dir, map_name=map_name))
     elif platform.system() == 'Linux':
-        ret = os.system("zip -9 {mapy_gotowe}/OSMapaPL-{wersja_mapy}_IMG.zip gmapsupp.img".format(
-            binarki=bin_dir, wersja_mapy=wersja_mapy, mapy_gotowe=mapy_gotowe))
+        ret = os.system("zip -9 {out_dir}/{map_name}-{map_version}_IMG.zip gmapsupp.img".format(
+            binarki=bin_dir, map_version=map_version, out_dir=out_dir, map_name=map_name))
     else:
         raise Exception("Unsupported operating system.")
 
-    if(ret != 0):
+    if(ret == 0):
+        print("ZIP archive containing gmapsupp.img created.")
+    else:
         raise Exception("Blad kompresora ZIP")
 
 
-def clean(mapa_root, tmp_mapa_glowna):
+def clean(mapa_root, map_work_dir):
+    """Removes the working directory of map compilation.
+
+    Args:
+        mapa_root (string): path to a directory above map_work_dir
+        map_work_dir (string): path to the directory to be removed
+    """
     os.chdir(mapa_root)
-    shutil.rmtree(tmp_mapa_glowna, True)
+    shutil.rmtree(map_work_dir, True)
 

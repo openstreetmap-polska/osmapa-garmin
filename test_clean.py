@@ -1,4 +1,6 @@
-# coding: utf-8
+    """Test script to clean up working environment for the main map.
+    """
+
 import os
 from osmapa.Map import Map
 
@@ -17,8 +19,4 @@ if __name__ == "__main__":
             map_name="OSMapaPL"
             )
 
-    #mapGlowna.fetch()
-    mapGlowna.split()
-    mapGlowna.prepare()
-    mapGlowna.compile()
     mapGlowna.clean()
