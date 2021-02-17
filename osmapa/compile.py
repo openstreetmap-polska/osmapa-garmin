@@ -1,5 +1,5 @@
-    """OpenStreetMap Garmin map compiler.
-    """
+"""OpenStreetMap Garmin map compiler.
+"""
 import os
 import platform
 import shutil

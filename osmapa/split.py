@@ -1,5 +1,5 @@
-    """OpenStreetMap splitter.
-    """
+"""OpenStreetMap splitter.
+"""
 import os
 import platform
 import shutil
