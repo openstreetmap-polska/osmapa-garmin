@@ -44,6 +44,6 @@ class Map:
         osmapa.compile.produce(self.bin_dir, self.root_dir, self.map_work_dir, self.typfile, self.style, self.configfile, self.fid, self.src_dir, self.map_version, self.publisher_id, self.map_name, self.out_dir)
 
     def clean(self):
-        osmapa.split.clean(self.map_split_dir)
+        osmapa.split.clean(self.root_dir, self.map_split_dir)
         osmapa.compile.clean(self.root_dir, self.map_work_dir)
 
