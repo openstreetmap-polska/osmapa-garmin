@@ -36,7 +36,7 @@ def do(bin_dir, data_dir, pbf_filename, dest_dir, map_id):
         map_id=map_id, data_dir=data_dir, bin_dir=bin_dir, pbf_filename=pbf_filename))
     elif platform.system() == 'Linux':
         ret = os.system('java -enableassertions -Xmx6000m -jar {bin_dir}/splitter.jar --keep-complete=true --mapid={map_id} --max-nodes=1600000 {data_dir}/{pbf_filename}'.format(
-        data_dir=data_dir, map_id=map_id, binarki=bin_dir, pbf_filename=pbf_filename))
+        data_dir=data_dir, map_id=map_id, bin_dir=bin_dir, pbf_filename=pbf_filename))
     else:
         raise Exception("Unsupported operating system.")
 
