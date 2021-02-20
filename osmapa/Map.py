@@ -46,7 +46,7 @@ class Map:
         osmapa.compile.prepare(dest_dir=self.map_work_dir, split_source_dir=self.map_split_dir)
 
     def compile(self):
-        osmapa.compile.produce(bin_dir=self.bin_dir, mapa_root=self.root_dir, map_work_dir=self.map_work_dir, typfile=self.typfile, style=self.style, configfile=self.configfile, fid=self.fid, src_dir=self.src_dir, map_version=self.map_version, publisher_id=self.publisher_id, map_name=self.map_name, out_dir=self.out_dir, coastlinefile=self.coastlinefile, bounds_dir=self.bounds_subdir, lowercase=self.lowercase, codepage=self.codepage, verbose=self.verbose)
+        osmapa.compile.produce(bin_dir=self.bin_dir, mapa_root=self.root_dir, map_work_dir=self.map_work_dir, typfile=self.typfile, style=self.style, configfile=self.configfile, fid=self.fid, src_dir=self.src_dir, map_version=self.map_version, publisher_id=self.publisher_id, map_name=self.map_name, out_dir=self.out_dir, coastlinefile=self.coastlinefile, bounds_subdir=self.bounds_subdir, lowercase=self.lowercase, codepage=self.codepage, verbose=self.verbose)
 
     def clean(self):
         osmapa.split.clean(mapa_root=self.root_dir, split_dir=self.map_split_dir)
