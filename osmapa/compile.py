@@ -31,7 +31,7 @@ def prepare(dest_dir, split_source_dir):
         shutil.copy(split_source_dir + "/" + plik, dest_dir)
 
 
-def produce(bin_dir, mapa_root, map_work_dir, typfile, style, configfile, fid, src_dir, map_version, publisher_id, map_name, out_dir):
+def produce(bin_dir, mapa_root, map_work_dir, typfile, style, configfile, fid, src_dir, map_version, publisher_id, map_name, out_dir, coastlinefile="", bounds_subdir="", lowercase=False, codepage="", verbose=False):
     """Compile a distrubution set for a single map.
 
     Args:
@@ -47,10 +47,23 @@ def produce(bin_dir, mapa_root, map_work_dir, typfile, style, configfile, fid, s
         publisher_id (string): publisher ID to be used (2-digit)
         map_name (string): alphanumeric map name to be used
         out_dir (string): path to a directory where the produced map distribution set will be placed
+        coastlinefile (string): name of a PBF file containing coastlines (optional)
+        bounds_subdir (string): name of a subdirectory relative to src_dir where bouds data is located
+        lowercase (boolean): whether to include --lower-case parameter in mkgmap call
+        codepage (string): Windows code page ID (e.g. "1250" for Polish)
+        verbose (boolean): whether to include --verbose parameter in mkgmap call
 
     Returns:
         None
     """
+
+    # Process optional parameters.
+    param_coastline = "" if coastlinefile == "" else '--coastlinefile={src_dir}/{coastlinefile}'.format(src_dir=src_dir, coastlinefile=coastlinefile)
+    param_bounds = "" if bounds_subdir == "" else '--bounds={src_dir}/{bounds_subdir}'.format(src_dir=src_dir, bounds_subdir=bounds_subdir)
+    param_lowercase = '--lower-case' if lowercase else ""
+    param_codepage = "" if codepage == "" else '--code-page={codepage}'.format(codepage)
+    param_verbose = "--verbose" if verbose else ""
+
 
     os.chdir(map_work_dir)
 
@@ -61,8 +74,8 @@ def produce(bin_dir, mapa_root, map_work_dir, typfile, style, configfile, fid, s
         tmp_typ_filename = ""
     
     ret = -1
-    command = 'java -enableassertions -Xmx6000m -jar {bin_dir}/mkgmap/mkgmap.jar --verbose --family-name={map_name} --description={map_name} --series-name={map_name}  --coastlinefile={src_dir}/coastlines_europe-latest.osm.pbf  --read-config={mapa_root}/config/{configfile} --bounds={src_dir}/bounds --family-id={fid} --product-id={fid} --mapname={publisher_id}{fid}001 --overview-mapname={publisher_id}{fid}000   --style-file={bin_dir}/resources/styles/ --style={styl}  --check-styles  -c template.args  {tmp_typ_filename}'.format(
-            mapa_root=mapa_root, bin_dir=bin_dir, styl=style, configfile=configfile, fid=fid, publisher_id=publisher_id,map_name=map_name, src_dir=src_dir, tmp_typ_filename=tmp_typ_filename)
+    command = 'java -enableassertions -Xmx6000m -jar {bin_dir}/mkgmap/mkgmap.jar {param_verbose} --family-name={map_name} --description={map_name} --series-name={map_name}  {param_coastline}  --read-config={mapa_root}/config/{configfile} {param_bounds} --family-id={fid} --product-id={fid} --mapname={publisher_id}{fid}001 --overview-mapname={publisher_id}{fid}000   --style-file={bin_dir}/resources/styles/ --style={styl}  --check-styles {param_lowercase} {param_codepage} -c template.args  {tmp_typ_filename}'.format(
+            mapa_root=mapa_root, bin_dir=bin_dir, styl=style, configfile=configfile, fid=fid, publisher_id=publisher_id,map_name=map_name, src_dir=src_dir, tmp_typ_filename=tmp_typ_filename, param_verbose=param_verbose, param_lowercase=param_lowercase, param_codepage=param_codepage, param_coastline=param_coastline, param_bounds=param_bounds)
 
     if platform.system() == 'Windows':
         command = 'start /low /b /wait ' + command
