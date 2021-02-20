@@ -80,6 +80,7 @@ def produce(bin_dir, mapa_root, map_work_dir, typfile, style, configfile, fid, s
     if platform.system() == 'Windows':
         command = 'start /low /b /wait ' + command
 
+    print("Command: {command}".format(command=command))
     if platform.system() == 'Windows' or platform.system() == 'Linux':
         ret = os.system(command)
     else:

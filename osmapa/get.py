@@ -67,5 +67,5 @@ def fetch_osm_data(bin_dir, url, dest_dir, pbf_filename) -> int:
 if __name__ == "__main__":
     import sys
     print("Running osmapa.get.fetch_osm_data as script...")
-    get_osm_data(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    fetch_osm_data(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     print("Done.")
