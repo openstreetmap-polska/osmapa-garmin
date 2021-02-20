@@ -4,6 +4,7 @@ from osmapa.Map import Map
 import time
 
 version = "V2.00"
+src_db_url = "https://download.geofabrik.de/europe/poland-latest.osm.pbf"
 polska_pbf_filename = 'poland-latest.osm.pbf'
 srtm_pbf_filename = 'srtm_polska.pbf'
 coastline_pbf_filename = 'coastlines_europe-latest.osm.pbf'
@@ -16,7 +17,7 @@ if __name__ == "__main__":
         # OSMapaPL.
 
         mapGlowna = Map(version=version, source_pbf_filename=polska_pbf_filename, 
-                publisher_id=publisher_id, root_dir=mapa_root, coastline_pbf_filename=coastline_pbf_filename,
+                publisher_id=publisher_id, root_dir=mapa_root, coastlinefile=coastline_pbf_filename,
                 fid="004", 
                 style="rogal",
                 typfile="rogal.typ",
@@ -29,7 +30,7 @@ if __name__ == "__main__":
         
         # We fetch new map data only when processing the main map (OSMapaPL). Other maps use the same data. 
         mapGlowna.print_timestamped_message("Fetching new map data from the OSM server.")
-        mapGlowna.fetch()
+        mapGlowna.fetch(src_db_url)
 
         mapGlowna.print_timestamped_message("Splitting.")
         mapGlowna.split()
@@ -44,7 +45,7 @@ if __name__ == "__main__":
         # OSMapaPL-OGONKI.
 
         mapOgonki = Map(version=version, source_pbf_filename=polska_pbf_filename, 
-                publisher_id=publisher_id, root_dir=mapa_root, coastline_pbf_filename=coastline_pbf_filename,
+                publisher_id=publisher_id, root_dir=mapa_root, coastlinefile=coastline_pbf_filename,
                 fid="005", 
                 style="rogal",
                 typfile="rogal-ogonki.typ",
