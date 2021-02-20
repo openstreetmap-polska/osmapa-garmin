@@ -2,3 +2,4 @@ apt install zip
 apt install default-jre
 apt install osmctools
 apt install nsis
+sudo apt install apache2
