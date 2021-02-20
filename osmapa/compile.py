@@ -61,7 +61,7 @@ def produce(bin_dir, mapa_root, map_work_dir, typfile, style, configfile, fid, s
     param_coastline = "" if coastlinefile == "" else '--coastlinefile={src_dir}/{coastlinefile}'.format(src_dir=src_dir, coastlinefile=coastlinefile)
     param_bounds = "" if bounds_subdir == "" else '--bounds={src_dir}/{bounds_subdir}'.format(src_dir=src_dir, bounds_subdir=bounds_subdir)
     param_lowercase = '--lower-case' if lowercase else ""
-    param_codepage = "" if codepage == "" else '--code-page={codepage}'.format(codepage)
+    param_codepage = "" if codepage == "" else '--code-page={codepage}'.format(codepage=codepage)
     param_verbose = "--verbose" if verbose else ""
 
 
