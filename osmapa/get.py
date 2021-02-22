@@ -55,7 +55,7 @@ def fetch_osm_data(bin_dir, url, dest_dir, pbf_filename) -> int:
         ret = os.system('{bin_dir}\\wget.exe -c {url} -t 5  -O {dest_dir}/{pbf_file}'.format(
         bin_dir=bin_dir, url=url, pbf_file=pbf_filename, dest_dir=dest_dir))
     elif platform.system() == 'Linux':
-        ret = os.system('wget -c {url} -t 5  -O {dest_dir}/{pbf_file}'.format(
+        ret = os.system('wget -q -c {url} -t 5  -O {dest_dir}/{pbf_file}'.format(
         url=url, pbf_file=pbf_filename, dest_dir=dest_dir))
     else:
         raise UnsupportedOSError("Unsupported operating system.")
