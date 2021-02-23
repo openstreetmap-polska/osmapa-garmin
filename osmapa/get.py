@@ -26,6 +26,14 @@ class FetchError(Error):
     def __init__(self, message) -> None:
         self.message = message
 
+class FileError(Error):
+    """Error raised if file exists which should't exist or there is no file which should be present.
+
+    Attributes:
+        message -- error message
+    """
+    def __init__(self, message) -> None:
+        self.message = message
 
 def fetch_osm_data(bin_dir, url, dest_dir, pbf_filename) -> int:
     """Fetches OSM data.
@@ -62,6 +70,50 @@ def fetch_osm_data(bin_dir, url, dest_dir, pbf_filename) -> int:
 
     if(ret != 0):
         raise FetchError("Error fetching OSM data.")
+
+
+def extract(bin_dir, work_dir, source_pbf_filename, extracted_pbf_filename, extract_polygon_filename) -> int:
+    """Extract data from source_pbf_filename to extracted_pbf_filename by clipping with extract_polygon_filename.
+        If extract_polygon_filename is an empty string, no extraction is done. 
+
+    Args:
+        bin_dir (string): path to a directory holding compilation tools
+        work_dir (string): directory where all files are present or placed
+        source_pbf_filename (string): [description]
+        extracted_pbf_filename ([type]): [description]
+        extract_polygon_filename ([type]): [description]
+    """    
+    if source_pbf_filename == extracted_pbf_filename:
+        raise FileError("Source and destination files must not be the same.")
+    if extract_polygon_filename == None or len(extract_polygon_filename) == 0:
+        raise FileError("No ploygon filename given.")
+    src_filepath = "{work_dir}/{source_pbf_filename}".format(work_dir=work_dir, source_pbf_filename=source_pbf_filename)
+    dest_filepath = "{work_dir}/{extracted_pbf_filename}".format(work_dir=work_dir, extracted_pbf_filename=extracted_pbf_filename)
+    poly_filepath = "{work_dir}/{extract_polygon_filename}".format(work_dir=work_dir, extract_polygon_filename=extract_polygon_filename)
+    if not os.path.isfile(src_filepath):
+        raise FileError("{src_filepath} is missing.".format(src_filepath=src_filepath))
+    if not os.path.isfile(poly_filepath):
+        raise FileError("{poly_filepath} is missing.".format(poly_filepath=poly_filepath))
+    try:
+        os.remove(dest_filepath)
+    except:
+        pass
+
+    # Do the extracting.
+    ret = -1
+    if platform.system() == 'Windows':
+        ret = os.system('{bin_dir}\\osmosis\\bin\\\osmosis.bat --rb {src_filepath} --bounding-polygon file={poly_filepath} --wb {dest_filepath}'.format(bin_dir=bin_dir, src_filepath=src_filepath, poly_filepath=poly_filepath, dest_filepath=dest_filepath))
+    elif platform.system() == 'Linux':
+        ret = os.system('osmosis --rb {src_filepath} --bounding-polygon file={poly_filepath} --wb {dest_filepath}'.format(bin_dir=bin_dir, src_filepath=src_filepath, poly_filepath=poly_filepath, dest_filepath=dest_filepath))
+    else:
+        raise Exception("Unsupported operating system.")
+
+    if(ret == 0):
+        print("The map has been extracted.")
+    else:
+        raise Exception("Blad ekstrakcji danych OSM.")
+    
+    return ret
 
 
 if __name__ == "__main__":
