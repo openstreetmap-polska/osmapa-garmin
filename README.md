@@ -10,16 +10,16 @@ Garmin maps of Poland called OSMapa (available at http://garmin.osmapa.pl).
 1. Install Python 3.
 2. Install Java.
 
-All other tools are present in the bin/ directory. 
+All other tools are present in the `bin/` directory. 
 
 ### Linux
 
 1. Install Python 3.
 2. Install Java.
 3. In addition to Python 3 and Java, additional tools must be available in the PATH:
-    - zip
-    - osmconvert and osmfilter
-    - nsis
+    - `zip`
+    - `osmconvert` and `osmfilter`
+    - `nsis`
 
 Here is how you can install all required components on a Ubuntu system:
 ```
@@ -34,9 +34,9 @@ apt install nsis
 Several required data files are not included in the git repo due to their size. You must fetch them 
 manually and place in correct paths before running the toolchain. 
 
-- OSM/coastlines_europe-latest.osm.pbf
-- OSM/srtm_polska.pbf
-- bounds/*.bnd  (http://osm.thkukuk.de/data/bounds-latest.zip)
+- `OSM/coastlines_europe-latest.osm.pbf`
+- `OSM/srtm_polska.pbf`
+- `bounds/*.bnd`  (http://osm.thkukuk.de/data/bounds-latest.zip)
 
 ## Usage
 
