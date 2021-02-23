@@ -52,7 +52,7 @@ class Map:
         """     
         if len(self.extract_polygon_filename) > 0:
             out_filename = "extracted-" + self.source_pbf_filename
-            ret = osmapa.get.extract( work_dir=self.src_dir, source_pbf_filename=self.source_pbf_filename, extracted_pbf_filename=out_filename, extract_polygon_filename=self.extract_polygon_filename)
+            ret = osmapa.get.extract(bin_dir=self.bin_dir, work_dir=self.src_dir, source_pbf_filename=self.source_pbf_filename, extracted_pbf_filename=out_filename, extract_polygon_filename=self.extract_polygon_filename)
             if ret == 0:
                 self.extracted_pbf_filename = out_filename
 
