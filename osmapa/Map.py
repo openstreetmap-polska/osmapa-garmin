@@ -7,7 +7,7 @@ import time
 
 class Map:
 
-    def __init__(self, version, fid, style, typfile, configfile, publisher_id, map_name, source_pbf_filename, root_dir, extract_polygon_filename="", coastlinefile="", bounds_subdir="", lowercase=False, codepage="", verbose=False) -> None:
+    def __init__(self, version, fid, style, typfile, configfile, publisher_id, map_name, source_pbf_filename, root_dir, coastlinefile="", bounds_subdir="", lowercase=False, codepage="", verbose=False) -> None:
         self.version = version                                                          # wersja
         self.fid = fid                                                                  # fid_glowna
         self.style = style                                                              # styl_mapy_glowna
@@ -17,7 +17,6 @@ class Map:
         self.publisher_id = publisher_id                                                # 
         self.map_name = map_name                                                        #
         self.root_dir = root_dir                                                        # mapa_root
-        self.extract_polygon_filename = extract_polygon_filename                        # name of the *.poly file used to clip data from source_pbf_filename 
         self.coastlinefile = coastlinefile
         self.bounds_subdir = bounds_subdir
         self.lowercase = lowercase
@@ -33,28 +32,27 @@ class Map:
         self.map_work_dir = self.work_dir + "/OSMapa-work-"  + self.map_version + "_" + self.publisher_id + self.fid    # tmp_mapa_glowna
         self.map_split_dir = self.work_dir + "/OSMapa-split-" + self.map_version + "_" + self.publisher_id + self.fid   # tmp_mapa_split_glowna
         self.out_dir = self.root_dir + "/products"                                    # mapy_gotowe
-        self.extracted_pbf_filename = source_pbf_filename                               # by default, extracted filename equals source filename; this attribute may be changed by extract()
 
-    def fetch(self, src_db_url) -> int:
+
+    def fetch(self, src_db_url, dest_filename) -> int:
         """Fetch source PBF data.
 
         Args:
             src_db_url (string): URL to the source PBF file.
+            dest_filename (string): name under which the file will be saved
 
         Returns:
             int: status (0 - success)
         """        
-        return osmapa.get.fetch_osm_data(bin_dir=self.bin_dir, url=src_db_url, dest_dir=self.src_dir, pbf_filename=self.source_pbf_filename)
+        return osmapa.get.fetch_osm_data(bin_dir=self.bin_dir, url=src_db_url, dest_dir=self.src_dir, pbf_filename=dest_filename)
 
-    def extract(self) -> int:
+
+    def extract(self, src_filename, dest_filename, extract_polygon_filename) -> int:
         """Extract data from source_pbf_filename to extracted_pbf_filename by clipping with extract_polygon_filename.
         If extract_polygon_filename is an empty string, no extraction is done. 
         """     
-        if len(self.extract_polygon_filename) > 0:
-            out_filename = "extracted-" + self.source_pbf_filename
-            ret = osmapa.get.extract(bin_dir=self.bin_dir, work_dir=self.src_dir, source_pbf_filename=self.source_pbf_filename, extracted_pbf_filename=out_filename, extract_polygon_filename=self.extract_polygon_filename)
-            if ret == 0:
-                self.extracted_pbf_filename = out_filename
+        if len(extract_polygon_filename) > 0:
+            ret = osmapa.get.extract(bin_dir=self.bin_dir, work_dir=self.src_dir, source_pbf_filename=src_filename, extracted_pbf_filename=dest_filename, extract_polygon_filename=extract_polygon_filename)
 
 
     def generate_boundaries(self):

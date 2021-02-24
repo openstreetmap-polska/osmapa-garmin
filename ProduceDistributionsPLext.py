@@ -6,9 +6,13 @@ import os
 from osmapa.Map import Map
 import time
 
-version = "V2.00"
+
 src_db_url = "http://download.openstreetmap.fr/extracts/europe-latest.osm.pbf"
 europe_pbf_filename = 'europe-latest.osm.pbf'
+
+version = "V2.00"
+poland_pbf_filename = 'extract-europe-latest.osm.pbf'
+extract_polygon_filename = 'polska_przygranicze.poly'
 srtm_pbf_filename = 'srtm_polska.pbf'
 coastline_pbf_filename = 'coastlines_europe-latest.osm.pbf'
 publisher_id = "66"
@@ -18,9 +22,8 @@ if __name__ == "__main__":
 
         # OSMapaPLext.
 
-        mapGlowna = Map(version=version, source_pbf_filename=europe_pbf_filename, 
+        mapGlowna = Map(version=version, source_pbf_filename=poland_pbf_filename, 
                 publisher_id=publisher_id, root_dir=mapa_root, coastlinefile=coastline_pbf_filename,
-                extract_polygon_filename = 'polska_przygranicze.poly',
                 fid="004", 
                 style="rogal",
                 typfile="rogal.typ",
@@ -33,10 +36,13 @@ if __name__ == "__main__":
         
         # We fetch new map data only when processing the main map (OSMapaPL). Other maps use the same data. 
         mapGlowna.print_timestamped_message("Fetching new map data from the OSM server.")
-        mapGlowna.fetch(src_db_url)
+        mapGlowna.fetch(src_db_url=src_db_url, dest_filename=europe_pbf_filename)
 
+        # We extract new mapa data only once. Other maps use the same data. 
         mapGlowna.print_timestamped_message("Extracting.")
-        mapGlowna.extract()
+        mapGlowna.extract(src_filename=europe_pbf_filename, dest_filename=poland_pbf_filename, extract_polygon_filename=extract_polygon_filename)
+
+
         mapGlowna.print_timestamped_message("Splitting.")
         mapGlowna.split()
         mapGlowna.print_timestamped_message("Preparing compilaton environment.")
@@ -49,9 +55,8 @@ if __name__ == "__main__":
 
         # OSMapaPL-OGONKI.
 
-        mapOgonki = Map(version=version, source_pbf_filename=europe_pbf_filename, 
+        mapOgonki = Map(version=version, source_pbf_filename=poland_pbf_filename, 
                 publisher_id=publisher_id, root_dir=mapa_root, coastlinefile=coastline_pbf_filename,
-                extract_polygon_filename = 'polska_przygranicze.poly',
                 fid="005", 
                 style="rogal",
                 typfile="rogal-ogonki.typ",
@@ -63,8 +68,6 @@ if __name__ == "__main__":
                 )
 
         mapOgonki.print_timestamped_message("START.")
-        mapOgonki.print_timestamped_message("Extracting.")
-        mapOgonki.extract()
         mapOgonki.print_timestamped_message("Splitting.")
         mapOgonki.split()
         mapOgonki.print_timestamped_message("Preparing compilaton environment.")
@@ -77,9 +80,8 @@ if __name__ == "__main__":
 
         # OSMapaPL-light.
 
-        mapLight = Map(version=version, source_pbf_filename=europe_pbf_filename, 
+        mapLight = Map(version=version, source_pbf_filename=poland_pbf_filename, 
                 publisher_id=publisher_id, root_dir=mapa_root, coastlinefile=coastline_pbf_filename,
-                extract_polygon_filename = 'polska_przygranicze.poly',
                 fid="006", 
                 style="osmapa-light",
                 typfile="rogal.typ",
@@ -89,8 +91,6 @@ if __name__ == "__main__":
                 )
 
         mapLight.print_timestamped_message("START.")
-        mapLight.print_timestamped_message("Extracting.")
-        mapLight.extract()
         mapLight.print_timestamped_message("Splitting.")
         mapLight.split()
         mapLight.print_timestamped_message("Preparing compilaton environment.")
@@ -103,9 +103,8 @@ if __name__ == "__main__":
 
         # OSMapaPL-SZLAKI.
 
-        mapSzlaki = Map(version=version, source_pbf_filename=europe_pbf_filename, 
+        mapSzlaki = Map(version=version, source_pbf_filename=poland_pbf_filename, 
                 publisher_id=publisher_id, root_dir=mapa_root, 
-                extract_polygon_filename = 'polska_przygranicze.poly',
                 fid="011", 
                 style="trasy-rowerowe",
                 typfile="trasy-rowerowe.typ",
@@ -114,8 +113,6 @@ if __name__ == "__main__":
                 )
 
         mapSzlaki.print_timestamped_message("START.")
-        mapSzlaki.print_timestamped_message("Extracting.")
-        mapSzlaki.extract()
         mapSzlaki.print_timestamped_message("Splitting.")
         mapSzlaki.split()
         mapSzlaki.print_timestamped_message("Preparing compilaton environment.")
