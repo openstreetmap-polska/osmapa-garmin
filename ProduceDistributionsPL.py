@@ -31,7 +31,7 @@ if __name__ == "__main__":
         
         # We fetch new map data only when processing the main map (OSMapaPL). Other maps use the same data. 
         mapGlowna.print_timestamped_message("Fetching new map data from the OSM server.")
-        mapGlowna.fetch(src_db_url)
+        mapGlowna.fetch(src_db_url=src_db_url, dest_filename=polska_pbf_filename)
 
         mapGlowna.print_timestamped_message("Splitting.")
         mapGlowna.split()
