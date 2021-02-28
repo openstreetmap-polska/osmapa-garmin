@@ -10,7 +10,6 @@ polska_pbf_filename = 'poland-latest.osm.pbf'
 srtm_pbf_filename = 'srtm_polska.pbf'
 coastline_pbf_filename = 'coastlines_europe-latest.osm.pbf'
 publisher_id = "66"
-fenix_publisher_id = "21"
 mapa_root = os.path.abspath("./")
 
 if __name__ == "__main__":
@@ -23,7 +22,7 @@ if __name__ == "__main__":
                 style="rogal",
                 typfile="rogal.typ",
                 configfile="osmapa.config",
-                map_name="OSMapaPL", 
+                map_name="OSMapaPL-PODSTAWOWA", 
                 bounds_subdir="bounds"
                 )
 
@@ -134,27 +133,3 @@ if __name__ == "__main__":
         mapWarstwice.print_timestamped_message("Cleaning.")
         mapWarstwice.clean()
         mapWarstwice.print_timestamped_message("DONE.")
-
-        # OSMapaPL-FENIX.
-
-        mapFenix = Map(version=version, source_pbf_filename=polska_pbf_filename, 
-                root_dir=mapa_root, 
-                publisher_id=fenix_publisher_id, 
-                fid="116", 
-                style="fenix-polska",
-                typfile="fenix-polska.typ",
-                configfile="fenix_polska.config",
-                map_name="OSMapaPL-Fenix", 
-                bounds_subdir="bounds"
-                )
-
-        mapFenix.print_timestamped_message("START.")
-        mapFenix.print_timestamped_message("Splitting.")
-        mapFenix.split()
-        mapFenix.print_timestamped_message("Preparing compilaton environment.")
-        mapFenix.prepare()
-        mapFenix.print_timestamped_message("Compiling.")
-        mapFenix.compile()
-        mapFenix.print_timestamped_message("Cleaning.")
-        mapFenix.clean()
-        mapFenix.print_timestamped_message("DONE.")

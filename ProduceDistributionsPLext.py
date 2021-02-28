@@ -28,7 +28,7 @@ if __name__ == "__main__":
                 style="rogal",
                 typfile="rogal.typ",
                 configfile="osmapa.config",
-                map_name="OSMapaPLext", 
+                map_name="OSMapaPLext-PODSTAWOWA", 
                 bounds_subdir="bounds"
                 )
 
