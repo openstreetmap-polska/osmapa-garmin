@@ -1,4 +1,10 @@
 """OpenStreetMap map source file fetcher. 
+
+Author: Andrzej Talarczyk <andrzej@talarczyk.com>
+
+Based on work of Michał Rogalski (Rogal).
+
+License: GPLv3.
 """
 
 import platform
@@ -48,8 +54,7 @@ def fetch_osm_data(bin_dir, url, dest_dir, pbf_filename) -> int:
         Exception: Unsupported operating system.
         Exception: Error fetching OSM data.
 
-    Returns:
-        int: return code (0: success)
+    Returns 0 if everything has gone well, otherwise an exception is thrown. 
     """
 
     try:
@@ -70,23 +75,26 @@ def fetch_osm_data(bin_dir, url, dest_dir, pbf_filename) -> int:
 
     if(ret != 0):
         raise FetchError("Error fetching OSM data.")
-
+    return ret
+    
 
 def extract(bin_dir, work_dir, source_pbf_filename, extracted_pbf_filename, extract_polygon_filename) -> int:
-    """Extract data from source_pbf_filename to extracted_pbf_filename by clipping with extract_polygon_filename.
+    """Extracts data from source_pbf_filename to extracted_pbf_filename by clipping with extract_polygon_filename.
         If extract_polygon_filename is an empty string, no extraction is done. 
 
     Args:
         bin_dir (string): path to a directory holding compilation tools
         work_dir (string): directory where all files are present or placed
-        source_pbf_filename (string): [description]
-        extracted_pbf_filename ([type]): [description]
-        extract_polygon_filename ([type]): [description]
+        source_pbf_filename (string): path to the file which should be clipped 
+        extracted_pbf_filename ([type]): path where clipped file will be saved
+        extract_polygon_filename ([type]): path to a polygon file to be used as a mask for clipping
+
+    Returns 0 if everything has gone well, otherwise an exception is thrown. 
     """    
     if source_pbf_filename == extracted_pbf_filename:
         raise FileError("Source and destination files must not be the same.")
     if extract_polygon_filename == None or len(extract_polygon_filename) == 0:
-        raise FileError("No ploygon filename given.")
+        raise FileError("No polygon file path given.")
     src_filepath = "{work_dir}/{source_pbf_filename}".format(work_dir=work_dir, source_pbf_filename=source_pbf_filename)
     dest_filepath = "{work_dir}/{extracted_pbf_filename}".format(work_dir=work_dir, extracted_pbf_filename=extracted_pbf_filename)
     poly_filepath = "{work_dir}/{extract_polygon_filename}".format(work_dir=work_dir, extract_polygon_filename=extract_polygon_filename)
@@ -118,6 +126,10 @@ def extract(bin_dir, work_dir, source_pbf_filename, extracted_pbf_filename, extr
 
 if __name__ == "__main__":
     import sys
-    print("Running osmapa.get.fetch_osm_data as script...")
-    fetch_osm_data(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-    print("Done.")
+    primary_def_name = "osmapa.get.fetch_osm_data()"
+    if (len(sys.argv) < 5):
+        print("You are trying to run {primary_def_name} as script but not all required parameters have been given. Stop.".format(primary_def_name=primary_def_name))
+    else:
+        print("Running {primary_def_name} as script...".format(primary_def_name=primary_def_name))
+        fetch_osm_data(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+        print("Done.")

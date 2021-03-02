@@ -1,3 +1,10 @@
+"""OpenStreetMap map class. 
+
+Author: Andrzej Talarczyk <andrzej@talarczyk.com>
+
+License: GPLv3.
+"""
+
 import osmapa
 import osmapa.get
 import osmapa.boundaries
@@ -6,6 +13,8 @@ import osmapa.split
 import time
 
 class Map:
+    """Class representing a single Garmin map and the whole environment to generate it.
+    """
 
     def __init__(self, version, fid, style, typfile, configfile, publisher_id, map_name, source_pbf_filename, root_dir, coastlinefile="", bounds_subdir="", lowercase=False, codepage="", verbose=False) -> None:
         self.version = version                                                          # wersja
@@ -49,27 +58,54 @@ class Map:
 
     def extract(self, src_filename, dest_filename, extract_polygon_filename) -> int:
         """Extract data from source_pbf_filename to extracted_pbf_filename by clipping with extract_polygon_filename.
-        If extract_polygon_filename is an empty string, no extraction is done. 
-        """     
+        If extract_polygon_filename is an empty string, no extraction is done.   
+
+        Args:
+            src_filename (string): name of the file which should be clipped 
+            dest_filename (string): name of clipped file will be saved
+            extract_polygon_filename (string): path to a polygon file to be used as a mask for clipping
+
+        Returns:
+            int: 0 if success
+        """
+   
         if len(extract_polygon_filename) > 0:
             ret = osmapa.get.extract(bin_dir=self.bin_dir, work_dir=self.src_dir, source_pbf_filename=src_filename, extracted_pbf_filename=dest_filename, extract_polygon_filename=extract_polygon_filename)
 
 
     def generate_boundaries(self):
+        """Generate boundaries for Poland. 
+
+        Bugs:
+            This method is not intended for general use.
+        """
         osmapa.boundaries.generate(bin_dir=self.bin_dir, src_dir=self.src_dir, pbf_filename=self.source_pbf_filename)
 
     def split(self):
+        """Split the map. 
+        """
         osmapa.split.do(bin_dir=self.bin_dir, data_dir=self.src_dir, pbf_filename=self.source_pbf_filename, dest_dir=self.map_split_dir, map_id=self.map_id)
 
     def prepare(self):
+        """Prepare compilation environment.
+        """
         osmapa.compile.prepare(dest_dir=self.map_work_dir, split_source_dir=self.map_split_dir)
 
     def compile(self):
+        """Compile the map.
+        """
         osmapa.compile.produce(bin_dir=self.bin_dir, mapa_root=self.root_dir, map_work_dir=self.map_work_dir, typfile=self.typfile, style=self.style, configfile=self.configfile, fid=self.fid, src_dir=self.src_dir, map_version=self.map_version, publisher_id=self.publisher_id, map_name=self.map_name, out_dir=self.out_dir, coastlinefile=self.coastlinefile, bounds_subdir=self.bounds_subdir, lowercase=self.lowercase, codepage=self.codepage, verbose=self.verbose)
 
     def clean(self):
+        """Clean up all temporary files used in the compilation process.
+        """
         osmapa.split.clean(mapa_root=self.root_dir, split_dir=self.map_split_dir)
         osmapa.compile.clean(mapa_root=self.root_dir, map_work_dir=self.map_work_dir)
 
     def print_timestamped_message(self, msg):
+        """Print out a message preceded with "==== OSMapa Generator", time stamp and map name.
+
+        Args:
+            msg (string): message text
+        """
         print("==== OSMapa Generator [{time_str}]: {map_name} - {msg_str}".format(time_str=time.strftime('%Y-%m-%d %H:%M:%S'), map_name=self.map_name, msg_str=msg))
