@@ -1,9 +1,23 @@
+"""
+OpenStreetMap boundary generator. 
+
+Author: Andrzej Talarczyk <andrzej@talarczyk.com>
+
+Based on work of Michał Rogalski (Rogal).
+
+License: GPLv3.
+"""
 import os
 import platform
 import shutil
 
 
 def clean(src_dir):
+    """Remove target files.
+
+    Args:
+        src_dir (string): path to the directory from which target files will be removed
+    """
     if os.path.isfile("{dane_osm}/poland.o5m".format(dane_osm=src_dir)):
         os.remove("{dane_osm}/poland.o5m".format(dane_osm=src_dir))
     if os.path.isfile("{dane_osm}/poland-boundaries.osm".format(dane_osm=src_dir)):
@@ -12,11 +26,20 @@ def clean(src_dir):
         shutil.rmtree("{dane_osm}/bounds".format(dane_osm=src_dir))
 
 
-def exist(src_dir) -> bool:
-    return os.path.isfile("{dane_osm}/poland.o5m".format(dane_osm=src_dir)) & os.path.isfile("{dane_osm}/poland-boundaries.osm".format(dane_osm=src_dir)) & os.path.exists("{dane_osm}/bounds".format(dane_osm=src_dir))
+def generate(bin_dir, src_dir, pbf_filename) -> int:
+    """Generates boundaries. 
 
+    Args:
+        bin_dir (string): path to a directory holding compilation tools
+        src_dir (string): path to a directory with source data
+        pbf_filename (string): source PBF file
 
-def generate(bin_dir, src_dir, pbf_filename):
+    Raises:
+        Exception: [description]
+
+    Returns:
+        int: 0 if succes.
+    """
     ret = -1
 
     if platform.system() == 'Windows':
@@ -37,3 +60,5 @@ def generate(bin_dir, src_dir, pbf_filename):
             
     else:
         raise Exception("Unsupported operating system.")
+
+    return ret

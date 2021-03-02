@@ -1,6 +1,0 @@
-apt install zip
-apt install default-jre
-apt install osmctools
-sudo apt install osmosis
-apt install nsis
-sudo apt install apache2

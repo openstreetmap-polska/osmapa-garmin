@@ -1,4 +1,10 @@
 """OpenStreetMap Garmin map compiler.
+
+Author: Andrzej Talarczyk <andrzej@talarczyk.com>
+
+Based on work of Michał Rogalski (Rogal).
+
+License: GPLv3.
 """
 import os
 import platform

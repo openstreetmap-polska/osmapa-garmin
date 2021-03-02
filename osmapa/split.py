@@ -1,4 +1,10 @@
 """OpenStreetMap splitter.
+
+Author: Andrzej Talarczyk <andrzej@talarczyk.com>
+
+Based on work of Michał Rogalski (Rogal).
+
+License: GPLv3.
 """
 import os
 import platform
@@ -53,3 +59,14 @@ def clean(mapa_root, split_dir):
     """
     os.chdir(mapa_root)
     shutil.rmtree(split_dir, True)
+
+
+if __name__ == "__main__":
+    import sys
+    primary_def_name = "osmapa.split.do()"
+    if (len(sys.argv) < 6):
+        print("You are trying to run {primary_def_name} as script but not all required parameters have been given. Stop.".format(primary_def_name=primary_def_name))
+    else:
+        print("Running {primary_def_name} as script...".format(primary_def_name=primary_def_name))
+        do(bin_dir=sys.argv[1], data_dir=sys.argv[2], pbf_filename=sys.argv[3], dest_dir=sys.argv[4], map_id=sys.argv[5])
+        print("Split {pbf_filename} to {dest_dir} for map {map_id}.".format(pbf_filename=sys.argv[3], dest_dir=sys.argv[4], map_id=sys.argv[5]))
