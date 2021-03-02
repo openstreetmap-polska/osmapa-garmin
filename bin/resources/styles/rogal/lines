@@ -269,6 +269,7 @@ highway=living_street  [0x06 road_class=0 road_speed=1 resolution 24 ]
 
 
 # residential nieutwardzone
+highway=residential & tracktype=* & (surface=asphalt | surface=paved | surface=sett | surface=concrete | surface=concrete:lanes | surface=concrete:plates | surface=paving_stones  | surface=cobblestone  | surface=cobblestone:flattened  | surface=metal  | surface=wood) { set mkgmap:unpaved=0 }
 highway=residential & mkgmap:unpaved=1 {set mkgmap:no_name=yes} [0x0f resolution 23-22 continue]
 highway=residential & mkgmap:unpaved=1 [0x0f road_class=0 road_speed=1 resolution 24]
 
@@ -299,6 +300,7 @@ highway=minor & mkgmap:unpaved=1 [0x0a road_class=0 road_speed=1 resolution 22]
 highway=minor [0x06 road_class=0 road_speed=3 resolution 20]
 
 #unclassified nieutwardzone
+highway=unclassified & tracktype=* & (surface=asphalt | surface=paved | surface=sett | surface=concrete | surface=concrete:lanes | surface=concrete:plates | surface=paving_stones  | surface=cobblestone  | surface=cobblestone:flattened  | surface=metal  | surface=wood) { set mkgmap:unpaved=0 }
 highway=unclassified & mkgmap:unpaved=1   {set mkgmap:no_name=yes} [0x0f resolution 23-22 continue]
 highway=unclassified & mkgmap:unpaved=1 [0x0f road_class=0 road_speed=1 resolution 24]
 
@@ -308,7 +310,7 @@ highway=unclassified {set mkgmap:no_name=yes} [0x10e11 resolution 23-22 continue
 highway=unclassified [0x06 road_class=0 road_speed=3 resolution 24]
 
 #road nieutwardzone
-
+highway=road & tracktype=* & (surface=asphalt | surface=paved | surface=sett | surface=concrete | surface=concrete:lanes | surface=concrete:plates | surface=paving_stones  | surface=cobblestone  | surface=cobblestone:flattened  | surface=metal  | surface=wood) { set mkgmap:unpaved=0 }
 highway=road & mkgmap:unpaved=1 {set mkgmap:no_name=yes} [0x0f resolution 23-22 continue]
 highway=road & mkgmap:unpaved=1 [0x0f road_class=0 road_speed=1 resolution 24]
 
