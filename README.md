@@ -1,9 +1,12 @@
 # osmapa-garmin
 
-This is a toolchain  (mkgmap, mkgmap styles, TYP files and helper scripts) used to compile 
-Garmin maps of Poland called OSMapa (available at http://garmin.osmapa.pl).
+A complete environment setup for producing and sharing maps of Poland for Garmin GPS 
+receivers using OpenStreetMap data, called OSMapaPL (available at https://garmin.osmapa.pl).
 
-## Requirements
+It consists of a toolchain (mkgmap, mkgmap styles, TYP files and helper scripts) used to compile 
+maps, helper scripts to automate the process and code for a webpage to ditribute the maps.  
+
+## Requirements for the toolchain
 
 ### Windows
 
@@ -41,4 +44,14 @@ manually and place in correct paths before running the toolchain.
 ## Usage
 
 ```python3 -u ProduceDistributionsPL.py```
+
+## See also
+
+See documentation in the `/doc/` directory.
+
+## Authors
+
+Michał Rogalski 
+Andrzej Talarczyk
+Paweł Kosiorek
 
