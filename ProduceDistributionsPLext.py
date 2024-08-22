@@ -10,7 +10,7 @@ import time
 src_db_url = "https://download.geofabrik.de/europe-latest.osm.pbf"
 europe_pbf_filename = 'europe-latest.osm.pbf'
 
-version = "V2.02"
+version = "V2.03"
 poland_pbf_filename = 'extracted-europe-latest.osm.pbf'
 extract_polygon_filename = 'polska_przygranicze.poly'
 srtm_pbf_filename = 'srtm_polska.pbf'
