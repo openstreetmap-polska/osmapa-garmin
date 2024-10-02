@@ -32,6 +32,12 @@ apt install osmctools
 apt install nsis
 ```
 
+If you need to install the tools by hand, please look for binary and source distributions here:
+- osmosis: https://wiki.openstreetmap.org/wiki/Osmosis
+- osmconvert: https://wiki.openstreetmap.org/wiki/Osmconvert
+- osmfilter: https://wiki.openstreetmap.org/wiki/Osmfilter
+- makensis: this one is really difficult to install on Linux with no root access, no good recipy at the moment, sorry...
+
 ### Data files
 
 Several required data files are not included in the git repo due to their size. You must fetch them 
